@@ -1,8 +1,21 @@
 import * as url from 'url';
+import { Command } from 'commander';
+
+const commandLine = new Command();
+
+commandLine
+    .option('--mode <mode>')
+    .option('--port <port>')
+
+commandLine.parse();
+
+const clOptions = commandLine.opts();
+
+console.log(clOptions)
 
 const config = {
     SERVER: 'atlas',
-    PORT: 8080,
+    PORT: clOptions.port || 8080,
     DIRNAME: url.fileURLToPath(new URL('.', import.meta.url)),
     get UPLOAD_DIR() { return `${this.DIRNAME}/public/img`},
     mongoDB_Local: 'mongodb://127.0.0.1:27017/practica',
