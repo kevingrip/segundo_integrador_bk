@@ -41,19 +41,21 @@ const adminAuth = (req, res, next) => {
  */
 router.post('/register', async (req, res) => {
     try {
-        console.log(req.file);
+        // console.log(req.file);
         console.log(req.body);
         const firstName = req.body.firstName;
         const lastName = req.body.lastName;
+        const age = parseInt(req.body.age);
         const email = req.body.email;
         const password = createHash(req.body.password);
+        console.log(age);
         // const role = req.body.role;
 
         const checkUser = await userManager.getUser(email);
-        console.log(checkUser)
+        console.log(password)
 
         if (checkUser === null) {
-            await userManager.createUser(firstName, lastName, email, password);
+            await userManager.createUser(firstName, lastName, email, age, password);
             res.status(200).send({ origin: config.SERVER, payload: 'Usuario creado!' });
         } else {
             return res.status(500).send({ origin: config.SERVER, payload: 'El mail ya se encuentra registrado'})
@@ -134,6 +136,20 @@ router.get('/githublogin', passport.authenticate('ghlogin', {failureRedirect: `/
         res.status(500).send({ origin: config.SERVER, payload: null, error: err.message });
     }
 });
+
+router.get('/current', async(req, res) => {
+    try {
+        const user = { ...req.session.user };
+        user.password = '*******';
+
+        res.status(200).send({
+            user: user,
+            login_type: user.login_type 
+        });
+    } catch (error) {
+        res.status(500).send({ error: error.message });
+    }
+})
 
 /**
  * Utilizamos el middleware adminAuth (ver arriba) para verificar si el usuario

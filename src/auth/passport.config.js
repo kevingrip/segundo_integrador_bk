@@ -55,10 +55,11 @@ const initAuthStrategies = () => {
                             firstName: profile._json.name.split(' ')[0],
                             lastName: profile._json.name.split(' ')[1],
                             email: email,
-                            password: 'none'
+                            age: null,
+                            password: 'none'                            
                         }
 
-                        await manager.createUser(user.firstName,user.lastName,user.email,user.password);
+                        await manager.createUser(user.firstName,user.lastName,user.email,user.age,user.password);
                         const recheckUser = await manager.getUser(email);
 
                         return done(null, recheckUser);
