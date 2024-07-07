@@ -1,5 +1,6 @@
 import * as url from 'url';
 import { Command } from 'commander';
+import dotenv from 'dotenv';
 
 const commandLine = new Command();
 
@@ -11,19 +12,21 @@ commandLine.parse();
 
 const clOptions = commandLine.opts();
 
-console.log(clOptions)
+dotenv.config();
+
+console.log(process.env.SECRET)
 
 const config = {
     SERVER: 'atlas',
-    PORT: clOptions.port || 8080,
+    PORT: process.env.PORT || clOptions.port || 8080,
     DIRNAME: url.fileURLToPath(new URL('.', import.meta.url)),
     get UPLOAD_DIR() { return `${this.DIRNAME}/public/img`},
-    mongoDB_Local: 'mongodb://127.0.0.1:27017/practica',
-    mongoDB_Atlas: 'mongodb+srv://backendCoder:coder2024@proyectocoder.hnxdqo9.mongodb.net/ecommerce',
-    SECRET: 'practicaCoder',
-    GITHUB_CLIENT_ID: 'Iv23liUoNjhhlsDaUQqF',
-    GITHUB_CLIENT_SECRET: 'cac23d9bedf323b40686efb00c1e52369e2614cf',
-    GITHUB_CALLBACK_URL: 'http://localhost:8080/api/sessions/githublogin'
+    // mongoDB_Local: 'mongodb://127.0.0.1:27017/practica',
+    mongoDB_Atlas: process.env.mongoDB_Atlas,
+    SECRET: process.env.SECRET,
+    GITHUB_CLIENT_ID: process.env.GITHUB_CLIENT_ID,
+    GITHUB_CLIENT_SECRET: process.env.GITHUB_CLIENT_SECRET,
+    GITHUB_CALLBACK_URL: process.env.GITHUB_CALLBACK_URL
 };
 
 export default config;
